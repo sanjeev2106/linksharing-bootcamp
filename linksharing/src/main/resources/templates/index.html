@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<!--<html lang="en">-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="icon" href="/images/icon.ico" type="image/png" sizes="16x16" />
+<!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+-->
+    <link th:href="@{/css/bootswatch.css}" rel="stylesheet" />
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script th:src="@{/js/checkEmailAndUsernameAvailability.js}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            //$("#sucessRegister").fadeOut(6000);
+            //$("#errordisplay").fadeOut(6000);
+            if (document.referrer != 'http://localhost:8080/') {
+                history.pushState(null, null, '/');
+                window.addEventListener('popstate', function () {
+                    history.pushState(null, null, '/');
+                });
+            }
+          //window.history.go();
+        });
+    </script>
+
+    <title>LinkSharing</title>
+</head>
+<body>
+
+<!--       header.html        -->
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary" id="my-nav-bar">
+    <div id="brand-name">
+        <a class="navbar-brand" id="link-sharing" href="/">Link Sharing</a>
+    </div>
+    <div id="search-part">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="panel-body bg-warning text-center" th:text="${msg}"></div>
+
+<!-- ................................ -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- recent shares -->
+
+        <div class="col-sm-12 col-md-8 col-lg-7 col-xl-8 row2">
+            <div id="recent-shares-div">
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="card-header-recentshares">Recent Shares</h5>
+                    <div class="container-fluid recent-shares-card">
+                        <div th:each=" resource : ${recentShares}"
+                             class="old-div mysearchedresources container-fluid topicpage-posts-card search-resource-from-topic">
+                            <div class="row topicpage-posts-div-body card-body">
+                                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 user-img-div" style="height: 100px">
+                                    <img th:src="${resource.user.photo}" class="user-img" style="height: 100px">
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                            <div><h5 th:text="${resource.user.username}">Username</h5></div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                            <div><a href="#" th:text="${resource.topic.topicName}">Topic name</a></div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text" th:text="${resource.description}">With supporting text below as
+                                        a
+                                        natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.</p>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 social-links">
+                                            <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                                            <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                            <a href="#"><i class="fa fa-tumblr" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 topics-posts-options">
+                                            <a th:href="@{/postRating/{id}(id=${resource.resourceId})}">View Post</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="margin: 0;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="top-posts-div">
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="card-header-topposts">Top Posts</h5>
+                    <div class="container-fluid top-posts-card">
+                        <div th:each=" resource : ${topPosts}"
+                             class="old-div mysearchedresources container-fluid topicpage-posts-card search-resource-from-topic">
+                            <div class="row topicpage-posts-div-body card-body">
+                                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 user-img-div" style="height: 100px">
+                                    <img th:src="${resource.user.photo}" class="user-img" style="height: 100px">
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                            <div><h5 th:text="${resource.user.username}">Username</h5></div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                            <div><a href="#" th:text="${resource.topic.topicName}">Topic name</a></div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text" th:text="${resource.description}">With supporting text below as
+                                        a
+                                        natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.With supporting text below as a natural lead-in to additional
+                                        content.</p>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 social-links">
+                                            <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                                            <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                            <a href="#"><i class="fa fa-tumblr" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 topics-posts-options">
+                                            <a th:href="@{/postRating/{id}(id=${resource.resourceId})}">View Post</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="margin: 0;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Login-->
+        <div class="col-sm-12 col-md-4 col-lg-5 col-xl-4 row3">
+
+            <div id="login-div">
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="login-form-header">Login</h5>
+                    <div class="container-fluid card-body" id="login-form-div">
+                        <form action="/login" id="login-form-form" name="login" method="post">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Username*</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="text" required name="username" class="form-control">
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Password*</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="password" required name="password" class="form-control">
+
+                                    <div class="panel-body bg-warning text-center" th:text="${loginerror}"></div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <a href="/forgotPasswordPage">Forgot Password</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!--Register-->
+
+            <div id="reg-div">
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header" id="reg-form-header">Register</h5>
+                    <div class="container-fluid card-body" id="reg-form-div">
+                        <form action="#" th:action="@{/users/registration}" th:object="${user}" method="post"
+                              enctype="multipart/form-data" id="reg-form-form">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>First name*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="text" required name="firstName" class="form-control"
+                                                   th:field="*{firstName}" pattern="[a-zA-Z]{3,15}" title="minimum 3 digits and only letters allowed">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Last name*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="text" required name="lastName" class="form-control"
+                                                   th:field="*{lastName}"  pattern="[a-zA-Z\s]+" title="only letters and white spaces allowed">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Email*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="email" required name="email" id="reg-email" class="form-control" th:field="*{email}">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                                        <div class="panel-body bg-warning text-center" id="email-msg"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Username*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="text" required name="username" id="reg-username"
+                                                   class="form-control" th:field="*{username}" pattern="[^' ']+" title="white spaces not allowed">
+                                        </div>
+                                        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                                        <div class="panel-body bg-warning text-center" id="uname-msg"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Password*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="password" required name="password" id="password" class="password form-control"
+                                                   th:field="*{password}">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Confirm Password*</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="password" required name="confirm-password" id="confirm-password"
+                                                   class="password form-control" th:field="*{confirmPassword}">
+                                        </div>
+                                    </div>
+                                    <div class="panel-body bg-warning text-center" id="pwd-error-msg"></div>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                            <label>Photo</label>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                            <input type="file" name="pic" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary" id="reg-btn">Register</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="row footer">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 navbar navbar-dark bg-primary">
+        <div class="copyright">
+            <p>© 2019 Copyright:
+                <a href="#"> TTN.com</a></p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

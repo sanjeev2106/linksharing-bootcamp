@@ -1,0 +1,58 @@
+body{
+    background-color: #7d7d7d6e;
+}
+
+#my-nav-bar {
+    display: flex;
+    border-bottom: 0.2rem solid #18BC9C;
+}
+
+.navbar-brand{
+    flex: 6;
+}
+
+.user-img {
+    margin: 0.5rem;
+    border: 0.1rem solid darkgray;
+    width: 100%;
+    height: 8rem;
+}
+
+.userprofile-posts-search{
+    display: inline;
+    float: right;
+}
+
+.userprofile-posts-options a{
+    margin: 0.2rem;
+}
+
+button.btn-a-link{
+    border: none;
+    background: transparent;
+    color: #18BC9C;
+}
+
+i.fa.fa-pencil-square-o{
+    color: #18BC9C;
+}
+
+
+.social-links a{
+    margin: 0.2rem;
+}
+
+.copyright{
+    width: 100%;
+    color: #fff;
+    text-align:center;
+}
+
+.footer{
+    border-top: 0.2rem solid #18BC9C;
+    margin: 0;
+}
+
+a:hover{
+    text-decoration: none;
+}
