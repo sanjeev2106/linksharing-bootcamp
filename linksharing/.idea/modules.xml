@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/linksharing.iml" filepath="$PROJECT_DIR$/linksharing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/linksharing_main.iml" filepath="$PROJECT_DIR$/.idea/modules/linksharing_main.iml" group="linksharing" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/linksharing_test.iml" filepath="$PROJECT_DIR$/.idea/modules/linksharing_test.iml" group="linksharing" />
     </modules>
   </component>
 </project>

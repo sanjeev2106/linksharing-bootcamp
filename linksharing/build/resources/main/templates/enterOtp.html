@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootswatch.css}" rel="stylesheet">
+    <link rel="icon" href="/images/icon.ico" type="image/png" sizes="16x16">
+
+    <title>Title</title>
+</head>
+<body>
+<center>
+    <div th:if="${session.email!=null}">
+
+    <div class="upper-part">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h3>Enter your OTP here</h3>
+                    </div>
+                    <div class="panel-body">
+                        </br>
+                        </br>
+                        <form action="/otpCheck" method='post' data-toggle="validator" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="otp" class="col-lg-5 control-label">Enter Otp that will sent to your
+                                    registered email id:</label>
+                                <div class="col-lg-5">
+                                    <input type="text" name="otp" class="form-control" id="otp"
+                                           placeholder="Enter your otp" required/>
+                                </div>
+                            </div><!--end form group-->
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-5">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div><!--end form group-->
+                            <div th:text="${session.otpError}"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</center>
+</center>
+<div th:unless="${session.email!=null}">
+    <script th:inline="javascript">
+        window.location.href = "/";
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+body{
+    background-color: #7d7d7d6e;
+}
+
+#my-nav-bar-postpage{
+    display: flex;
+    border-bottom: 0.2rem solid #18BC9C;
+}
+
+#brand-name-navbar-postpage {
+    flex: 6;
+}
+
+.user-img {
+    margin: 0.2rem 0 0.2rem 0;
+    border: 0.1rem solid darkgray;
+    width: 100%;
+    height: 8rem;
+}
+
+#post-trending-topic-subscription-type{
+    float: right;
+}
+
+#post-trending-topic-subscription-type div{
+    margin: 0.5rem;
+}
+
+#post-trending-topic-subscription-type .fa{
+    margin: 0.7rem;
+}
+
+i.fa.fa-heart-o{
+    color: #18BC9C;
+    cursor: pointer;
+}
+
+i.fa.fa-heart{
+    color: #18BC9C;
+    cursor: pointer;
+}
+
+.copyright{
+    width: 100%;
+    color: #fff;
+    text-align:center;
+}
+
+.footer{
+    border-top: 0.2rem solid #18BC9C;
+    margin: 0;
+}
+
+.posts-likes{
+    float: right;
+    margin-right: 2rem;
+}
+
+.posts-options a{
+    float: right;
+    margin: 0.3rem;
+}
+
+.social-links a{
+    font-size: 1.2rem;
+    margin: 0.2rem;
+}
+
+i{
+    padding: 0.2rem;
+}
+
+
+a:hover{
+    text-decoration: none;
+}
+

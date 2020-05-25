@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+    <script th:src="@{/js/editTopicName.js}"></script>
+    <script th:src="@{/js/changeSeriousness.js}"></script>
+    <script th:src="@{/js/changeVisibilityFromEditProfile.js}"></script>
+    <script th:src="@{js/usernameUnique.js}"></script>
+    <script th:src="@{js/pwdEqualsConfirmpwd.js}"></script>
+
+    <link th:href="@{/css/bootswatch.css}" rel="stylesheet">
+    <link th:href="@{/css/topicpage.css}" rel="stylesheet">
+    <link th:href="@{/css/editprofile.css}" rel="stylesheet">
+    <link rel="icon" href="/images/icon.ico" type="image/png" sizes="16x16">
+
+    <title>Edit Profile</title>
+</head>
+<body>
+
+<div th:if="${session.user!=null}">
+    <!------------------------------------NAV------------------------------------>
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary" id="my-nav-bar">
+        <a class="navbar-brand" href="/dashboard">Link Sharing</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <form class="form-inline my-2 my-lg-0" id="search-part" action="/searchTopic" method="post">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-topic-resource"
+                       name="topic">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 xol-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false"><img th:src="@{${session.user.photo}}" class="rounded-circle"
+                                                              style="height: 20px;width: 20px;">
+                                    <span th:text="${session.user.username}"></span></a>
+                                <div class="dropdown-menu" x-placement="bottom-start"
+                                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 39px, 0px);">
+                                    <a class="dropdown-item" href="/editProfile">profile</a>
+                                    <div th:if="${session.user.isAdmin()}">
+                                        <a class="dropdown-item" href="/userList">users</a>
+                                    </div>
+                                    <a class="dropdown-item" href="/logout">logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br>
+
+    <!-----------------------------------Body------------------------------------->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5">
+
+                <div class="card border-primary mb-3">
+                    <div class="container-fluid editprofile-summary-card">
+                        <div class="row editprofile-summary-div-body card-body">
+                            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 user-img-div">
+                                <img th:src="@{${session.user.photo}}" class="user-img">
+                            </div>
+                            <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                <h4 class="card-title"><span th:text="${session.user.username}"></span></h4>
+                                @<span th:text="${session.user.username}"></span>
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        Subscriptions
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        Topics
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <span th:text="${session.topicSubscribedCount}"></span>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <span th:text="${session.topicsCreatedCount}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-------------------------------------------------------------------->
+
+                <div id="dashboard-trending-topics-div">
+                    <div class="card border-primary mb-3">
+                        <h5 class="card-header" id="card-header-dashboard-trending-topics">Topics</h5>
+                        <div class="container-fluid dashboard-trending-topics-card"
+                             th:each="topic,i:${createdTopics}">
+                            <div>
+                                <form method="post" action="/changeSubscription">
+
+                                    <input th:name="topicId" th:value="${topic.topicId}" style="display: none"/>
+                                    <div class="row card-body">
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 user-img-div">
+                                            <img class="user-img" th:src="@{${topic.user.photo}}">
+                                        </div>
+                                        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                                            <!--<span class="card-title"><a href="#" th:class="'old-topic'+${topic.topicId}" th:text="${topic.topicName}">Grails</a></span>-->
+                                            <div class="old-topic-name"
+                                                 th:classappend="'old-topic-name'+${topic.topicId}"><a
+                                                    th:href="@{/topicPage/{id}(id=${topic.topicId})}"
+                                                    th:class="'old-topic'+${topic.topicId}"
+                                                    th:text="${topic.topicName}">Grails</a></div>
+                                            <div class="new-topic-name"
+                                                 th:classappend="'new-topic-name'+${topic.topicId}"
+                                                 style="display: none">
+                                                <div class="form-inline my-2 my-lg-0">
+                                                    <input class="new-topic-name-text form-control mr-sm-2" type="text"
+                                                           th:placeholder="${topic.topicName}">
+                                                    <div th:class="newtname-msg"></div>
+                                                    <button th:topic-id-attr="${topic.getTopicId()}"
+                                                            class="save-new-topic-name btn btn-primary my-2 my-sm-0"
+                                                            type="button">Save
+                                                    </button>
+                                                    <button type="button"
+                                                            class="close-topic-edit btn btn-primary my-2 my-sm-0">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                                    <p th:text="'@'+${topic.user.username}">@username</p>
+                                                    <div th:unless="${topic.user.username==session.user.username}"
+                                                         th:with="topicId = ${topic.topicId}">
+                                                        <p th:if="${topic.subscribers.contains(session.user.username)}">
+                                                            <button type="submit" name="btn" value="unsubscribe"
+                                                                    class="btn-a-link"><a>Unsubscribe</a></button>
+                                                        </p>
+                                                        <p th:unless="${topic.subscribers.contains(session.user.username)}">
+                                                            <button type="submit" name="btn" value="subscribe"
+                                                                    class="btn-a-link"><a>Subscribe</a></button>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-5 col-lg-5 col-xl-5">
+                                                    <p>Subscriptions</p>
+                                                    <p th:text="${topic.subscribers.size()}">50</p>
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-3">
+                                                    <p>Post</p>
+                                                    <p th:text="${topic.resources.size()}">30</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row subscription-type" id="dashboard-trending-topic-subscription-type">
+                                        <div th:if="${topic.subscribers.contains(session.user.username)}">
+                                            <div class="btn-group"
+                                                 th:unless="${topic.user.username==session.user.username}">
+                                            <span th:each="subs : ${session.subscriptionDetails}">
+                                                <span th:if="${subs.topic.topicId==topic.topicId}">
+                                                    <span th:with="seriousness = ${subs.seriousness}">
+
+                                                        <select type="submit" class="btn btn-secondary"
+                                                                th:topic-id="${topic.topicId}"
+                                                                th:classappend="newseriousness" name="newseriousness">
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[1]}"
+                                                                    value="SERIOUS">serious
+                                                            </option>
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[0]}"
+                                                                    value="CASUAL">casual
+                                                            </option>
+                                                            <option th:selected="${seriousness==session.seriousnessTypes[2]}"
+                                                                    value="VERY_SERIOUS">very
+                                                                serious
+                                                            </option>
+                                                        </select>
+
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <div th:unless="${topic.subscribers.contains(session.user.username)}">
+                                            <div class="btn-group">
+                                                <select th:unless="${topic.user.username==session.user.username}"
+                                                        type="button" class="btn btn-secondary" th:name="newseriousness"
+                                                        th:placeholder="seriousness" required>
+                                                    <option value="SERIOUS">serious</option>
+                                                    <option value="CASUAL">casual</option>
+                                                    <option value="VERY_SERIOUS">very serious</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <div th:if="${topic.user.username==session.user.username ||session.user.admin}">
+                                                <select type="button" class="btn btn-secondary"
+                                                        th:topic-id="${topic.topicId}"
+                                                        th:id="trendsvisibility+${topic.topicId}"
+                                                        th:classappend="newvisibility">
+                                                    <option th:selected="${topic.visibilty==topic.visibilty.PRIVATE}"
+                                                            value="PRIVATE">
+                                                        Private
+                                                    </option>
+                                                    <option th:selected="${topic.visibilty==topic.visibilty.PUBLIC}"
+                                                            value="PUBLIC">
+                                                        Public
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div th:unless="${topic.user.username==session.user.username || session.user.admin}">
+                                                <span class="btn btn-secondary" th:text="${topic.visibilty}"></span>
+                                            </div>
+                                        </div>
+                                        <span th:if="${topic.visibilty==topic.visibilty.PRIVATE}"><a href="#"><i
+                                                class="fa fa-envelope-o" th:id="trendsvisibility+${topic.topicId}"
+                                                style="font-size: 1.5rem"></i></a></span>
+                                        <span th:if="${topic.user.username==session.user.username || session.user.admin}">
+                                             <a th:href="@{/deleteTopic/{id}(id=${topic.topicId})}"><i
+                                                     class="fa fa-trash" style="font-size: 1.5rem"></i></a>
+                                             <span th:topic-id-attr1="${topic.getTopicId()}" th:class="edit-topic-name"><i
+                                                     class="fa fa-pencil-square-o" aria-hidden="true"
+                                                     style="font-size: 1.5rem"></i></span>
+                                    </span>
+                                    </div>
+                                </form>
+                            </div>
+                            <br>
+                            <br>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--////////////////////////////////////////////////////////////////////////////////-->
+            <div class="col-12 col-sm-12 col-md-6 col-lg-7 col-xl-7">
+
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header">Profile</h5>
+                    <div class="container-fluid card-body">
+                        <div class="panel panel-body bg-warning text-center" th:text="${updateProfileMsg}"></div>
+                        <form action="/editUserInfo" method="post" enctype="multipart/form-data">
+                            <div class="row">
+
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>First name</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="text" name="firstname" class="form-control"
+                                           th:placeholder="${session.user.firstName}" pattern="[a-zA-Z]{3,15}" title="minimum 3 digits and only letters allowed">
+                                </div>
+
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Last name</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="text" name="lastname" class="form-control"
+                                           th:placeholder="${session.user.lastName}" pattern="[a-zA-Z\s]+" title="only letters and white spaces allowed">
+                                </div>
+
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Username</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="text" name="username" id="edit-username" class="form-control"
+                                           th:placeholder="${session.user.username}" pattern="[^' ']+" title="white spaces not allowed">
+                                    <div class="panel panel-body bg-warning text-center" id="uname-msg" ></div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Photo</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="file" name="pic" class="form-control">
+                                </div>
+                            </div>
+                            <div th:if="${session.updateProfileMsg!=null}">
+                                <div th:text="${session.updateProfileMsg}"></div>
+                            </div>
+                            <div class="row editprofile-update-btn">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!--------------------------------->
+
+                <div class="card border-primary mb-3">
+                    <h5 class="card-header">Change Password</h5>
+                    <div class="container-fluid card-body">
+                        <div class="panel panel-body bg-warning text-center" th:text="${updatePwdMsg}"></div>
+                        <form action="/changePassword" method="post">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Password*</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="password" required id="password" name="password" class="password form-control">
+                                </div>
+
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <label>Confirm Password*</label>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                    <input type="password" required name="confirm-password" id="confirm-password"
+                                           class="password form-control">
+                                </div>
+                                <div th:if="${session.updatePwdMsg!=null}">
+                                    <div th:text="${session.updatePwdMsg}"></div>
+                                </div>
+                            </div>
+                            <div id="pwd-error-msg"></div>
+                            <div class="row editprofile-update-btn">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!----------------------------------FOOTER------------------------------------>
+
+    <div class="row footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 navbar navbar-dark bg-primary">
+                    <div class="copyright">
+                        <p>© 2019 Copyright:
+                            <a href="#"> TTN.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:unless="${session.user!=null}">
+    <script th:inline="javascript">
+        window.location.href = "/";
+    </script>
+</div>
+
+</body>
+</html>

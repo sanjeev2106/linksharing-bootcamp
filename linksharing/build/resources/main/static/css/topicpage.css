@@ -1,0 +1,77 @@
+body{
+    background-color: #7d7d7d6e;
+}
+
+#my-nav-bar-topicpage{
+    display: flex;
+    border-bottom: 0.2rem solid #18BC9C;
+}
+
+#brand-name-navbar-topicpage {
+    flex: 6;
+}
+
+#topicpage-posts-search-div{
+    float: right;
+}
+
+/*#topics-main-div{
+    margin-top: 1rem;
+}
+
+#topicpage-posts-search-dropdown-div{
+    float: right;
+}
+
+#subscription-type{
+    float: right;
+    margin: 0.2rem;
+}*/
+
+.subscriptions-div-body{
+    padding: 0;
+}
+
+.subscription-type{
+    float: right;
+}
+
+.subscription-type div{
+    margin: 0.5rem;
+}
+
+.subscription-type .fa{
+    margin: 0.5rem;
+}
+
+.topics-posts-options a{
+    margin: 0.2rem;
+}
+
+.user-img {
+    margin: 0.2rem 0 0.2rem 0;
+    border: 0.1rem solid darkgray;
+    width: 100%;
+    height: 8rem;
+}
+
+button.btn-a-link{
+    border: none;
+    background: transparent;
+    color: #18BC9C;
+}
+
+.copyright{
+    width: 100%;
+    color: #fff;
+    text-align:center;
+}
+
+.footer{
+    border-top: 0.2rem solid #18BC9C;
+    margin: 0;
+}
+
+i{
+    padding: 0.2rem;
+}

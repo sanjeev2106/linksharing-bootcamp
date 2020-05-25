@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="icon" href="/images/icon.ico" type="image/png" sizes="16x16">
+
+    <link th:href="@{/css/bootswatch.css}" rel="stylesheet">
+    <link th:href="@{/css/admin.css}" rel="stylesheet">
+    <script th:src="@{/js/userSortingInAdminPage.js}"></script>
+    <title>LinkSharing</title>
+</head>
+<body>
+
+<div th:if="${session.user!=null}">
+
+    <!--       header.html        -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary" id="my-nav-bar-adminpage">
+        <a class="navbar-brand" id="brand-name-navbar-adminpage" href="/dashboard">Link Sharing</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <form class="form-inline my-2 my-lg-0" id="search-part" action="/searchTopic" method="post">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search-topic-resource"
+                       name="topic">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <i class="fa fa-comment nav-link" data-toggle="modal" data-target="#myModal1"
+                       title="CreateTopic"></i>
+                </li>
+
+                <li class="nav-item">
+                    <i class="fa fa-envelope-o nav-link" data-toggle="modal" data-target="#myModal2"
+                       title="SendInvitation"></i>
+                </li>
+                <li class="nav-item">
+                    <i class="fa fa-link nav-link" data-toggle="modal" data-target="#myModal3"
+                       title="ShareLink"></i>
+                </li>
+                <li class="nav-item">
+                    <i class="fa fa-file-text nav-link" data-toggle="modal" data-target="#myModal4"
+                       title="ShareDocument"><!--addNewIcon--></i>
+                </li>
+                <li class="nav-item">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 xol-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false"><img th:src="@{${session.user.photo}}" class="rounded-circle"
+                                                              style="height: 20px;width: 20px;">
+                                    <span th:text="${session.user.username}"></span></a>
+                                <div class="dropdown-menu" x-placement="bottom-start"
+                                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 39px, 0px);">
+                                    <a class="dropdown-item" th:href="@{/userProfile/{userId}(userId=${session.user.userId})}">profile</a>
+
+                                    <div th:if="${session.user.isAdmin()}">
+                                        <a class="dropdown-item" href="/userList">users</a>
+                                    </div>
+                                    <a class="dropdown-item" href="/alltopicsPage">topics</a>
+                                    <a class="dropdown-item" href="/post">posts</a>
+                                    <a class="dropdown-item" href="/logout">logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- ...........body..................... -->
+    <!--CREATE TOPIC-->
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title card-title">Create Topic</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <form method="post" action="/createtopic">
+                        Name:* <input type="text" name="topicname" id="topic-name" placeholder="Topic Name">
+                        Visibility:* <select name="visibility">
+                        <option value="PUBLIC" name="PUBLIC">Public</option>
+                        <option value="PRIVATE" name="PRIVATE">Private</option>
+                    </select>
+                        <div id="tname-msg"></div>
+                        <br><br>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+                <div class="modal-footer card-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--SEND INVITATION-->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title card-title">Send Invitation</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <form action="/sendemail" method="get">
+                        Email:* <input type="text" name="recEmail" placeholder="Email">
+                        <br><br>
+                        Topic:* <select>
+                        <option>Topic</option>
+                        <option>Topic 1</option>
+                    </select>
+                        <br><br>
+                        <button type="submit">Invite</button>
+                    </form>
+                </div>
+                <div class="modal-footer card-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--SHARE LINK-->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title card-title">Share Link</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="#" th:action="@{/createLinkResource}" th:object="${resource}" method="post">
+                    <div class="modal-body card-body">
+                        Link:*<br> <input type="text" placeholder="Enter link" required name="urlPath"
+                                          th:field="*{urlPath}"><br>
+                        <br>
+                        Description:*<br> <textarea cols="22" rows=3 placeholder="Description" required
+                                                    name="description" th:field="*{description}"></textarea><br>
+                        <br>
+                        Topic:*
+                        <select name="resourcetopic" required>
+                            <option th:each="topic : ${session.topicSubscribed}" th:value="${topic.topicId}"
+                                    th:text="${topic.topicName}" th:title="${topic.getUser().username}">Topic
+                            </option>
+                        </select>
+                        <br><br><br>
+                        <button type="submit" class="btn btn-primary">Share</button>
+                    </div>
+                    <div class="modal-footer card-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!--SHARE DOCUMENT-->
+    <div class="modal fade" id="myModal4" role="dialog">
+        <div class="modal-dialog card border-primary mb-3">
+            <div class="modal-content">
+                <div class="modal-header card-header">
+                    <div class="modal-title">Share Document</div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="#" th:action="@{/createDocumentResource}" th:object="${resource}" method="post"
+                      enctype="multipart/form-data">
+                    <div class="modal-body">
+                        Document:* <br><input type="file" placeholder="Enter file" required name="path">
+                        <br><br>
+                        Description:* <br><textarea cols="22" rows=3 placeholder="Description" required
+                                                    name="description" th:field="*{description}"></textarea>
+                        <br><br>
+                        Topic:* <select name="resourcetopic" required>
+                        <option th:each="topic : ${session.topicSubscribed}" th:value="${topic.topicId}"
+                                th:text="${topic.topicName}" th:title="${topic.getUser().username}">Topic
+                        </option>
+                    </select>
+                        <br><br>
+                        <button type="submit">Share</button>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="card border-primary mb-3" id="admin-table-div">
+        <div class="card-header" id="admin-table-card-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 xol-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <h4>USERS</h4>
+                    </div>
+                    <div class="col-12 xol-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <select class="btn btn-secondary" name="selectUsers" id="selectUsers"
+                                value="${value}">
+                            <!--onchange="usersOnSelection(this.value)"-->
+                            <option name="allUsers" id="allUsers" value="allUsers">All Users</option>
+                            <option name="active" id="active" value="true">Active</option>
+                            <option name="deActive" id="deActive" value="false">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-12 xol-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="table-success">
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">UserID</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item sortById" value="asc" th:href="@{/sortById/{sortingOrder}(sortingOrder=1)}">Ascending</a>
+                                    <a class="dropdown-item sortById" value="desc" th:href="@{/sortById/{sortingOrder}(sortingOrder=0)}">Descending</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">UserName</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">A-Z</a>
+                                    <a class="dropdown-item" href="#">Z-A</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">Email</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">A-Z</a>
+                                    <a class="dropdown-item" href="#">Z-A</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">Fistname</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">A-Z</a>
+                                    <a class="dropdown-item" href="#">Z-A</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">Lastname</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">A-Z</a>
+                                    <a class="dropdown-item" href="#">Z-A</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">Active</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">Yes</a>
+                                    <a class="dropdown-item" href="#">No</a>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary">Manage</button>
+                                <button type="button"
+                                        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                    <a class="dropdown-item" href="#">Activate</a>
+                                    <a class="dropdown-item" href="#">Deactivate</a>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, iterStat : ${session.userList} " th:class="${iterStat.odd}?'table-light':'table-dark'">
+                        <td th:text="${user.userId}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.firstName}"></td>
+                        <td th:text="${user.lastName}"></td>
+                        <td th:text="${user.isActive()}?'Yes':'No'"></td>
+                        <td>
+                            <span th:if="${user.admin}" th:text="admin"></span>
+                            <span th:unless="${user.admin}">
+              <span th:if="${user.isActive()}">
+                   <a th:id="${user.userId}" th:href="@{/deactivateUser/{id}(id=${user.userId})}">Deactivate</a>
+              </span>
+                            <span th:id="${user.userId}" th:unless="${user.isActive()}">
+                  <a th:id="${user.userId}" th:href="@{/activateUser/{id}(id=${user.userId})}">Activate</a>
+              </span>
+                      </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination pagination-sm">
+                        <li class="page-item" th:each="i:${#numbers.sequence(1,session.pages)}">
+                            <a th:text="${i}" th:href="@{/userList(page=${i})}" class="page-link">a</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ................................. -->
+    <div class="row footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 navbar navbar-dark bg-primary">
+                    <div class="copyright">
+                        <p>© 2019 Copyright:
+                            <a href="#"> TTN.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:unless="${session.user!=null}">
+    <script th:inline="javascript">
+        window.location.href = "/";
+    </script>
+</div>
+
+</body>
+</html>
+
